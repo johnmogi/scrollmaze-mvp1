@@ -692,6 +692,9 @@ let heroRarityIndex = 0;
 let monsterFamilyIndex = 0;
 let itemRarityIndex = 0;
 let trapRarityIndex = 0;
+let recoveryRarityIndex = 0;
+let riddleRarityIndex = 0;
+let relicRarityIndex = 0;
 
 let currentHero = null;
 let currentMonster = null;
@@ -700,9 +703,58 @@ let currentTrap = null;
 let currentStory = null;
 let currentBoss = null;
 let currentBoard = null;
+let currentRecovery = null;
+let currentRiddle = null;
+let currentRelic = null;
 
 function deckEntries(entries) {
   return entries.map(([name, rarity]) => ({ name, rarity }));
+}
+
+function renderRecoveryCard(recovery) {
+  const container = document.getElementById("recovery-card");
+  const rarity = rarityConfig[recovery.rarity];
+  container.innerHTML = `
+    <div class="rounded-2xl border ${rarity.color} p-4 shadow-inner shadow-slate-900/60">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] ${rarity.accent}">${rarity.label}</p>
+          <h3 class="mt-1 text-lg font-semibold text-slate-100">${recovery.name}</h3>
+        </div>
+        <div class="text-4xl" aria-hidden="true">${recovery.emoji}</div>
+      </div>
+      <p class="mt-3 text-sm text-slate-200">${recovery.benefit}</p>
+    </div>
+  `;
+}
+
+function renderRiddleCard(riddle) {
+  const container = document.getElementById("riddle-card");
+  const rarity = rarityConfig[riddle.rarity];
+  container.innerHTML = `
+    <div class="rounded-2xl border ${rarity.color} p-4 shadow-inner shadow-slate-900/60">
+      <p class="text-xs uppercase tracking-[0.3em] ${rarity.accent}">${rarity.label}</p>
+      <h3 class="mt-2 text-lg font-semibold text-slate-100">${riddle.prompt}</h3>
+      <p class="mt-3 text-sm text-amber-200">Answer: ${riddle.answer}</p>
+    </div>
+  `;
+}
+
+function renderRelicCard(relic) {
+  const container = document.getElementById("relic-card");
+  const rarity = rarityConfig[relic.rarity];
+  container.innerHTML = `
+    <div class="rounded-2xl border ${rarity.color} p-4 shadow-inner shadow-slate-900/60">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] ${rarity.accent}">${rarity.label}</p>
+          <h3 class="mt-1 text-lg font-semibold text-slate-100">${relic.name}</h3>
+          <p class="text-sm text-slate-300">${relic.power}</p>
+        </div>
+        <div class="text-4xl" aria-hidden="true">${relic.emoji}</div>
+      </div>
+    </div>
+  `;
 }
 
 function randomFrom(array) {
@@ -984,6 +1036,21 @@ function formatBoardLog(board) {
   return `The explorers charted a ${board.rows}x${board.cols} maze shimmering with diverse rooms.`;
 }
 
+function formatRecoveryLog(recovery) {
+  const rarity = rarityConfig[recovery.rarity];
+  return `They discovered a ${rarity.label.toLowerCase()} refuge named ${recovery.name}.`;
+}
+
+function formatRiddleLog(riddle) {
+  const rarity = rarityConfig[riddle.rarity];
+  return `A ${rarity.label.toLowerCase()} riddle barred the path with the query: "${riddle.prompt}".`;
+}
+
+function formatRelicLog(relic) {
+  const rarity = rarityConfig[relic.rarity];
+  return `A ${rarity.label.toLowerCase()} relic surfaced: ${relic.name}.`;
+}
+
 function updateHeroRarityButton() {
   const button = document.getElementById("cycle-hero-rarity");
   const rarity = rarityConfig[rarityOrder[heroRarityIndex]];
@@ -1005,6 +1072,24 @@ function updateItemRarityButton() {
 function updateTrapRarityButton() {
   const button = document.getElementById("cycle-trap-rarity");
   const rarity = rarityConfig[rarityOrder[trapRarityIndex]];
+  button.textContent = `Rarity: ${rarity.emoji} ${rarity.label}`;
+}
+
+function updateRecoveryRarityButton() {
+  const button = document.getElementById("cycle-recovery-rarity");
+  const rarity = rarityConfig[rarityOrder[recoveryRarityIndex]];
+  button.textContent = `Rarity: ${rarity.emoji} ${rarity.label}`;
+}
+
+function updateRiddleRarityButton() {
+  const button = document.getElementById("cycle-riddle-rarity");
+  const rarity = rarityConfig[rarityOrder[riddleRarityIndex]];
+  button.textContent = `Rarity: ${rarity.emoji} ${rarity.label}`;
+}
+
+function updateRelicRarityButton() {
+  const button = document.getElementById("cycle-relic-rarity");
+  const rarity = rarityConfig[rarityOrder[relicRarityIndex]];
   button.textContent = `Rarity: ${rarity.emoji} ${rarity.label}`;
 }
 
@@ -1192,6 +1277,42 @@ function setupEventHandlers() {
     appendToLog(formatBossLog(currentBoss));
   });
 
+  document.getElementById("generate-recovery").addEventListener("click", () => {
+    const rarity = rarityOrder[recoveryRarityIndex];
+    currentRecovery = generateRecovery(rarity);
+    renderRecoveryCard(currentRecovery);
+    appendToLog(formatRecoveryLog(currentRecovery));
+  });
+
+  document.getElementById("cycle-recovery-rarity").addEventListener("click", () => {
+    recoveryRarityIndex = (recoveryRarityIndex + 1) % rarityOrder.length;
+    updateRecoveryRarityButton();
+  });
+
+  document.getElementById("generate-riddle").addEventListener("click", () => {
+    const rarity = rarityOrder[riddleRarityIndex];
+    currentRiddle = generateRiddle(rarity);
+    renderRiddleCard(currentRiddle);
+    appendToLog(formatRiddleLog(currentRiddle));
+  });
+
+  document.getElementById("cycle-riddle-rarity").addEventListener("click", () => {
+    riddleRarityIndex = (riddleRarityIndex + 1) % rarityOrder.length;
+    updateRiddleRarityButton();
+  });
+
+  document.getElementById("generate-relic").addEventListener("click", () => {
+    const rarity = rarityOrder[relicRarityIndex];
+    currentRelic = generateRelic(rarity);
+    renderRelicCard(currentRelic);
+    appendToLog(formatRelicLog(currentRelic));
+  });
+
+  document.getElementById("cycle-relic-rarity").addEventListener("click", () => {
+    relicRarityIndex = (relicRarityIndex + 1) % rarityOrder.length;
+    updateRelicRarityButton();
+  });
+
   document.getElementById("generate-board").addEventListener("click", () => {
     currentBoard = generateBoard();
     renderBoard(currentBoard);
@@ -1209,6 +1330,9 @@ function init() {
   updateMonsterFamilyButton();
   updateItemRarityButton();
   updateTrapRarityButton();
+  updateRecoveryRarityButton();
+  updateRiddleRarityButton();
+  updateRelicRarityButton();
   updateDeckInsights();
   setupEventHandlers();
 }
