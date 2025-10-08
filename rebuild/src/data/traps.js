@@ -1,0 +1,42 @@
+export const trapCatalog = [
+  {
+    name: "Syrup Snare",
+    rarity: "common",
+    emoji: "🪤",
+    difficulty: 4,
+    effect: "Immobilizes the unlucky until two dice successes free them.",
+    flavor: "A favorite prank of mischievous goblins.",
+  },
+  {
+    name: "Crystallized Quicksand",
+    rarity: "rare",
+    emoji: "🧊",
+    difficulty: 5,
+    effect: "Drags victims downward, costing one mana to escape.",
+    flavor: "Forms where sugar veins melt and refreeze overnight.",
+  },
+  {
+    name: "Fudge Hammer Pendulum",
+    rarity: "epic",
+    emoji: "🔨",
+    difficulty: 6,
+    effect: "Slams with sticky force, shattering relics on failure.",
+    flavor: "Built by resentful dwarves turned wardens.",
+  },
+  {
+    name: "Taffy Tension Web",
+    rarity: "rare",
+    emoji: "🕸️",
+    difficulty: 5,
+    effect: "Drains one die from the next roll as the snare clings tight.",
+    flavor: "Spun nightly by the Crystal Hive's artisan spiders.",
+  },
+  {
+    name: "Marzipan Mirage",
+    rarity: "legendary",
+    emoji: "🌀",
+    difficulty: 7,
+    effect: "Lures intruders into false exits until riddles are solved.",
+    flavor: "Only the sweetest whispers break the illusion.",
+  },
+];

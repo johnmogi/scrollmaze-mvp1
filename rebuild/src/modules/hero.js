@@ -17,7 +17,6 @@ export function generateHero(rarityKey) {
   const classKeys = Object.keys(heroClasses);
   const classKey = randomFrom(classKeys);
   const heroClass = heroClasses[classKey];
-
   const persona = rollPersona(heroClass);
   const rarity = rarityConfig[rarityKey] ?? rarityConfig.common;
   const dicePool = heroClass.baseDice + (rarity.diceMod ?? 0);
@@ -27,7 +26,7 @@ export function generateHero(rarityKey) {
     type: "hero",
     rarity: rarityKey,
     classKey,
-    title: `${heroClass.label}`,
+    title: heroClass.label,
     name: `${persona.name} ${persona.epithet}`,
     emoji: heroClass.emoji,
     persona: persona.persona,

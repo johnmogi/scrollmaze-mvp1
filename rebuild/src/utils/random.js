@@ -27,3 +27,20 @@ export function weightedRandom(weightMap) {
   const last = entries[entries.length - 1];
   return last?.key ?? last?.value ?? last ?? null;
 }
+
+export function sampleWithoutReplacement(array, count) {
+  if (!array?.length || count <= 0) {
+    return [];
+  }
+
+  const pool = [...array];
+  const result = [];
+
+  while (result.length < count && pool.length) {
+    const index = Math.floor(Math.random() * pool.length);
+    const [picked] = pool.splice(index, 1);
+    result.push(picked);
+  }
+
+  return result;
+}
