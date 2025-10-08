@@ -1,0 +1,12 @@
+{
+  "name": "scrollmaze",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint \"app.js\" \"src/**/*.js\" \"rebuild/src/**/*.js\""
+  },
+  "devDependencies": {
+    "eslint": "^9.11.0",
+    "@eslint/js": "^9.11.0"
+  }
+}

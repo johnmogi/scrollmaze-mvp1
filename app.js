@@ -1,182 +1,26 @@
-const rarityOrder = ["common", "rare", "epic", "legendary"];
+import { rarityOrder, rarityConfig } from "./src/data/rarity.js";
+import { deckEntries, pickCards } from "./src/utils/deck.js";
+import { randomFrom, weightedRandom } from "./src/utils/random.js";
+import {
+  generateHero,
+  formatHeroLog,
+  heroClasses,
+} from "./src/modules/hero/index.js";
 
-const rarityConfig = {
-  common: {
-    label: "Common",
-    color: "bg-green-500/20 border-green-500/60 text-green-200",
-    accent: "text-green-300",
-    emoji: "🍃",
-    diceMod: 0,
-    manaMod: 0,
-  },
-  rare: {
-    label: "Rare",
-    color: "bg-blue-500/20 border-blue-500/60 text-blue-200",
-    accent: "text-blue-300",
-    emoji: "💠",
-    diceMod: 1,
-    manaMod: 1,
-  },
-  epic: {
-    label: "Epic",
-    color: "bg-purple-500/20 border-purple-500/60 text-purple-200",
-    accent: "text-purple-300",
-    emoji: "🔮",
-    diceMod: 2,
-    manaMod: 2,
-  },
-  legendary: {
-    label: "Legendary",
-    color: "bg-orange-500/20 border-orange-500/60 text-orange-200",
-    accent: "text-orange-200",
-    emoji: "🧡",
-    diceMod: 3,
-    manaMod: 3,
-  },
-};
+function selectByRarity(collection, rarityKey) {
+  if (!collection.length) {
+    return null;
+  }
 
-const heroClasses = {
-  warrior: {
-    label: "Snobbish Paladin",
-    emoji: "🛡️",
-    persona: "They once judged cakes by crumb symmetry.",
-    baseDice: 3,
-    baseMana: 2,
-    archetype: "Paladin",
-    names: ["Ser Glaze", "Lady Marzipan", "Sir Fondant", "Count Custard"],
-    epithets: ["the Pristine", "the Immaculate", "of Polished Armor", "the Sanctimonious"],
-    decks: {
-      attack: deckEntries([
-        ["Radiant Riposte", "rare"],
-        ["Sugar-Lace Smite", "epic"],
-        ["Prissy Pommel", "common"],
-        ["Candied Judgment", "epic"],
-        ["Crust Crusade", "rare"],
-      ]),
-      defense: deckEntries([
-        ["Cookie Sheet Parry", "common"],
-        ["Glaze Aegis", "rare"],
-        ["Halo of Sprinkles", "epic"],
-        ["Rigid Etiquette", "common"],
-      ]),
-      spell: deckEntries([
-        ["Blessing of Brûlée", "rare"],
-        ["Snub of Sanctuary", "epic"],
-        ["Radiant Crumbflare", "legendary"],
-      ]),
-      relic: deckEntries([
-        ["Mirror of Perfect Crust", "epic"],
-        ["Gavel of Frosting", "rare"],
-        ["Etiquette Talisman", "common"],
-      ]),
-    },
-  },
-  mage: {
-    label: "Arrogant Mage",
-    emoji: "🪄",
-    persona: "They correct everyone on pronunciation of 'arcana'.",
-    baseDice: 2,
-    baseMana: 4,
-    archetype: "Mage",
-    names: ["Archibald", "Zephyria", "Meringuard", "Velvet"],
-    epithets: ["the Lofty", "the Confectioner", "the Grandiose", "Sugar Savant"],
-    decks: {
-      attack: deckEntries([
-        ["Arcane Fudge Bolt", "rare"],
-        ["Fondant Flash", "common"],
-        ["Nougat Nova", "epic"],
-        ["Crystalline Conflag", "legendary"],
-      ]),
-      defense: deckEntries([
-        ["Meringue Barrier", "rare"],
-        ["Snide Shield", "common"],
-        ["Macaron Matrix", "epic"],
-      ]),
-      spell: deckEntries([
-        ["Detention of Sprinkles", "common"],
-        ["Grand Glaciate", "epic"],
-        ["Sugar Singularity", "legendary"],
-        ["Taffy Teleport", "rare"],
-      ]),
-      relic: deckEntries([
-        ["Grimoire of Glucose", "legendary"],
-        ["Snob's Stirring Spoon", "rare"],
-        ["Arrogant Spectacles", "common"],
-      ]),
-    },
-  },
-  elf: {
-    label: "Cookie-Stealing Archer",
-    emoji: "🏹",
-    persona: "They can't resist unattended pastries.",
-    baseDice: 3,
-    baseMana: 3,
-    archetype: "Archer",
-    names: ["Crumbwhisper", "Glimmerbite", "Thistlechew", "Icingstride"],
-    epithets: ["the Sly", "Cookie Filcher", "Pastry Poacher", "Swift Crumb"],
-    decks: {
-      attack: deckEntries([
-        ["Snatch-and-Draw", "common"],
-        ["Caramel Volley", "rare"],
-        ["Sticky Fingers Shot", "rare"],
-        ["Thieving Tempest", "epic"],
-      ]),
-      defense: deckEntries([
-        ["Crumb Cloak", "common"],
-        ["Rolling Evasion", "rare"],
-        ["Sugar Veil", "epic"],
-      ]),
-      spell: deckEntries([
-        ["Shadow of Shortbread", "rare"],
-        ["Sticky Mirage", "epic"],
-        ["Cookie Compass", "common"],
-      ]),
-      relic: deckEntries([
-        ["Quiver of Crullers", "rare"],
-        ["Stolen Biscuit Charm", "common"],
-        ["Everfresh Cookie Jar", "legendary"],
-      ]),
-    },
-  },
-  dwarf: {
-    label: "Hard Bread Axe-Wielder",
-    emoji: "🪓",
-    persona: "They debate betrayal over stale pretzels.",
-    baseDice: 4,
-    baseMana: 2,
-    archetype: "Berserker",
-    names: [
-      "Brog Buttercrust",
-      "Helga Hardtack",
-      "Gunn Gridlebrew",
-      "Thrain Thickslice",
-    ],
-    epithets: ["the Double-Crosser", "Crumb-Scarred", "of the Hardened Loaf", "the Crust-Cracker"],
-    decks: {
-      attack: deckEntries([
-        ["Axe of Stale Intent", "common"],
-        ["Crust Breaker", "rare"],
-        ["Betrayer's Swing", "epic"],
-        ["Sugar Reaver", "legendary"],
-      ]),
-      defense: deckEntries([
-        ["Hardpan Guard", "common"],
-        ["Stone Oven Stand", "rare"],
-        ["Pretzel Fortify", "epic"],
-      ]),
-      spell: deckEntries([
-        ["Ferment Fury", "rare"],
-        ["Molasses Maelstrom", "epic"],
-        ["Gluten Grudge", "legendary"],
-      ]),
-      relic: deckEntries([
-        ["Crystalized Betrayal", "legendary"],
-        ["Loaf Splitter Token", "rare"],
-        ["Crumb Compass", "common"],
-      ]),
-    },
-  },
-};
+  if (!rarityKey) {
+    const entry = randomFrom(collection);
+    return entry ? { ...entry } : null;
+  }
+
+  const matches = collection.filter((entry) => entry.rarity === rarityKey);
+  const chosen = randomFrom(matches.length ? matches : collection);
+  return chosen ? { ...chosen } : null;
+}
 
 const monsterFamilies = [
   {
@@ -396,6 +240,10 @@ const itemCatalog = [
   },
 ];
 
+function generateItem(rarityKey) {
+  return selectByRarity(itemCatalog, rarityKey);
+}
+
 const trapCatalog = [
   {
     name: "Syrup Snare",
@@ -439,6 +287,10 @@ const trapCatalog = [
   },
 ];
 
+function generateTrap(rarityKey) {
+  return selectByRarity(trapCatalog, rarityKey);
+}
+
 const riddleDeck = [
   {
     prompt: "I crumble when praised, yet power armies when stored. What am I?",
@@ -461,6 +313,10 @@ const riddleDeck = [
     rarity: "legendary",
   },
 ];
+
+function generateRiddle(rarityKey) {
+  return selectByRarity(riddleDeck, rarityKey);
+}
 
 const recoveryDeck = [
   {
@@ -488,6 +344,10 @@ const recoveryDeck = [
     benefit: "Echoed melodies that recharged all dice to maximum.",
   },
 ];
+
+function generateRecovery(rarityKey) {
+  return selectByRarity(recoveryDeck, rarityKey);
+}
 
 const relicCatalog = [
   {
@@ -521,6 +381,10 @@ const relicCatalog = [
     power: "Shuffled the user's deck and drew an extra card.",
   },
 ];
+
+function generateRelic(rarityKey) {
+  return selectByRarity(relicCatalog, rarityKey);
+}
 
 const storyPrompts = [
   {
@@ -564,6 +428,15 @@ const storyPrompts = [
     reward: "The maze whispered the true location of the sugar heart.",
   },
 ];
+
+function generateStory() {
+  const story = randomFrom(storyPrompts);
+  if (!story) {
+    return null;
+  }
+  const mood = story.mood ?? "Whimsical peril";
+  return { ...story, mood };
+}
 
 const bossRoster = [
   {
@@ -654,6 +527,12 @@ const roomTypeConfig = {
   },
 };
 
+function generateBoss() {
+  const rarityKey = weightedRandom(bossRarityWeights);
+  const boss = selectByRarity(bossRoster, rarityKey) ?? randomFrom(bossRoster);
+  return boss ? { ...boss } : null;
+}
+
 const boardRarityWeights = {
   common: 0.45,
   rare: 0.3,
@@ -688,6 +567,48 @@ const boardConfig = {
   cols: 4,
 };
 
+function generateRoomLabel(roomType, rarityKey) {
+  const base = {
+    monster: ["Shimmering Nest", "Powdered Den", "Amber Watch"],
+    trap: ["Syrup Snareway", "Sticky Spiral", "Crackling Crevasse"],
+    item: ["Gilded Hoard", "Crate of Crumbs", "Sugared Cache"],
+    story: ["Whispering Gallery", "Echoing Archive", "Lore Landing"],
+    recoveryarea: ["Fondant Fountain", "Restoration Alcove", "Glaze Garden"],
+    riddle: ["Conundrum Corner", "Puzzle Atrium", "Riddle Rotunda"],
+    relic: ["Reliquary Recess", "Gleam Vault", "Relic Rotunda"],
+  };
+
+  const options = base[roomType] || ["Unknown Chamber"];
+  const rarity = rarityConfig[rarityKey];
+  const title = randomFrom(options);
+  return rarity ? `${rarity.emoji} ${title}` : title;
+}
+
+function generateBoard() {
+  const cells = Array.from({ length: boardConfig.rows }, () =>
+    Array.from({ length: boardConfig.cols }, () => {
+      const roomType = weightedRandom(
+        Object.entries(roomTypeWeights).map(([key, weight]) => ({ key, weight }))
+      );
+      const rarityKey = weightedRandom(
+        Object.entries(boardRarityWeights).map(([key, weight]) => ({ key, weight }))
+      );
+
+      return {
+        roomType,
+        rarity: rarityKey,
+        label: generateRoomLabel(roomType, rarityKey),
+      };
+    })
+  );
+
+  return {
+    rows: boardConfig.rows,
+    cols: boardConfig.cols,
+    cells,
+  };
+}
+
 let heroRarityIndex = 0;
 let monsterFamilyIndex = 0;
 let itemRarityIndex = 0;
@@ -706,10 +627,6 @@ let currentBoard = null;
 let currentRecovery = null;
 let currentRiddle = null;
 let currentRelic = null;
-
-function deckEntries(entries) {
-  return entries.map(([name, rarity]) => ({ name, rarity }));
-}
 
 function renderRecoveryCard(recovery) {
   const container = document.getElementById("recovery-card");
@@ -755,75 +672,6 @@ function renderRelicCard(relic) {
       </div>
     </div>
   `;
-}
-
-function randomFrom(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-function weightedRandom(weightMap) {
-  const entries = Array.isArray(weightMap)
-    ? weightMap
-    : Object.entries(weightMap).map(([key, weight]) => ({ key, weight }));
-
-  const total = entries.reduce((sum, entry) => sum + entry.weight, 0);
-  let roll = Math.random() * total;
-  for (const entry of entries) {
-    roll -= entry.weight;
-    if (roll <= 0) {
-      return entry.key ?? entry.value ?? entry;
-    }
-  }
-  const last = entries[entries.length - 1];
-  return last.key ?? last.value ?? last;
-}
-
-function pickCards(pool, rarity, count) {
-  const priorityLevels = rarityOrder.slice(0, rarityOrder.indexOf(rarity) + 1);
-  const filtered = pool.filter((card) => priorityLevels.includes(card.rarity));
-  const selection = [];
-  const poolCopy = [...(filtered.length ? filtered : pool)];
-
-  while (selection.length < count && poolCopy.length) {
-    const card = poolCopy.splice(Math.floor(Math.random() * poolCopy.length), 1)[0];
-    selection.push(card);
-  }
-  return selection;
-}
-
-function rollPersona(classKey) {
-  const data = heroClasses[classKey];
-  const name = randomFrom(data.names);
-  const epithet = randomFrom(data.epithets);
-  return `${name} ${epithet}`;
-}
-
-function generateHero(rarityKey) {
-  const classKey = randomFrom(Object.keys(heroClasses));
-  const heroData = heroClasses[classKey];
-  const rarityData = rarityConfig[rarityKey];
-  const dicePool = heroData.baseDice + rarityData.diceMod;
-  const manaPool = heroData.baseMana + rarityData.manaMod;
-
-  const deck = {
-    attack: pickCards(heroData.decks.attack, rarityKey, 3),
-    defense: pickCards(heroData.decks.defense, rarityKey, 2),
-    spell: pickCards(heroData.decks.spell, rarityKey, 2),
-    relic: pickCards(heroData.decks.relic, rarityKey, 1),
-  };
-
-  return {
-    type: "hero",
-    rarity: rarityKey,
-    classKey,
-    name: rollPersona(classKey),
-    title: heroData.label,
-    emoji: heroData.emoji,
-    persona: heroData.persona,
-    dicePool,
-    manaPool,
-    deck,
-  };
 }
 
 function generateMonster(familyIndex) {
@@ -1002,11 +850,6 @@ function appendToLog(message) {
   item.className = "rounded-xl bg-slate-950/60 px-4 py-3 shadow-inner shadow-slate-950/70";
   item.textContent = message;
   log.prepend(item);
-}
-
-function formatHeroLog(hero) {
-  const rarity = rarityConfig[hero.rarity];
-  return `The party enlisted the ${rarity.label.toLowerCase()} ${hero.title.toLowerCase()}, known as ${hero.name}.`;
 }
 
 function formatMonsterLog(monster) {

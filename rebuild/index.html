@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScrollMaze Generator Suite (Rebuild)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Nunito", sans-serif;
+      }
+      .scroll-title {
+        font-family: "UnifrakturCook", cursive;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.35em] text-orange-400">ScrollMaze</p>
+          <h1 class="scroll-title text-3xl text-slate-100 md:text-4xl">Generator Suite Rebuild</h1>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-slate-300">
+          <span class="inline-flex items-center gap-2 rounded-full bg-slate-800 px-3 py-1">
+            <span class="text-xl">🛠️</span>
+            Modular Prototype
+          </span>
+          <button
+            id="clear-log"
+            class="rounded-full border border-slate-700 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-200 transition hover:border-slate-500 hover:text-white"
+          >
+            Clear Log
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-6 py-10">
+      <div class="grid gap-10 lg:grid-cols-[2fr_1fr]">
+        <section class="grid gap-8">
+          <div class="grid gap-6 md:grid-cols-2">
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Summon Hero</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-hero-rarity"
+                    class="rounded-full border border-orange-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-orange-200 transition hover:border-orange-200 hover:text-orange-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">⚔️</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">
+                Craft a new champion drawn from the Great Cookie War legends.
+              </p>
+              <div class="mt-4 space-y-4" id="hero-card">
+                <p class="text-sm text-slate-500">Press generate to discover a hero.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-hero"
+                  class="rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
+                >
+                  Generate Hero
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Conjure Monster</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-monster-family"
+                    class="rounded-full border border-purple-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-purple-200 transition hover:border-purple-200 hover:text-purple-100"
+                  >
+                    Cycle Family
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">🕷️</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">
+                Unearth a lurking foe from the under-mazes guarding the sugar vaults.
+              </p>
+              <div class="mt-4 space-y-4" id="monster-card">
+                <p class="text-sm text-slate-500">Press generate to reveal a monster.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-monster"
+                  class="rounded-full bg-purple-500 px-5 py-2 text-sm font-semibold text-slate-100 shadow-lg transition hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-200"
+                >
+                  Generate Monster
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Mint Item</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-item-rarity"
+                    class="rounded-full border border-blue-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-200 transition hover:border-blue-200 hover:text-blue-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">🎁</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">
+                Forge trinkets and consumables infused with crystal sweetness.
+              </p>
+              <div class="mt-4 space-y-4" id="item-card">
+                <p class="text-sm text-slate-500">Press generate to craft an item.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-item"
+                  class="rounded-full bg-blue-500 px-5 py-2 text-sm font-semibold text-slate-100 shadow-lg transition hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-200"
+                >
+                  Generate Item
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Spring Trap</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-trap-rarity"
+                    class="rounded-full border border-rose-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-rose-200 transition hover:border-rose-200 hover:text-rose-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">🪤</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">Reveal hazards that test daring dice rolls and cleverness.</p>
+              <div class="mt-4 space-y-4" id="trap-card">
+                <p class="text-sm text-slate-500">Press generate to unveil a trap.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-trap"
+                  class="rounded-full bg-rose-500 px-5 py-2 text-sm font-semibold text-slate-100 shadow-lg transition hover:bg-rose-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-200"
+                >
+                  Generate Trap
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Spin Tale</h2>
+                <span class="text-3xl" aria-hidden="true">📖</span>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">Conjure a quest thread for the ScrollMaze saga.</p>
+              <div class="mt-4 space-y-4" id="story-card">
+                <p class="text-sm text-slate-500">Generate narratives to inspire the scroll.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-story"
+                  class="rounded-full bg-teal-500 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-200"
+                >
+                  Generate Story
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Reveal Relic</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-relic-rarity"
+                    class="rounded-full border border-amber-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200 transition hover:border-amber-200 hover:text-amber-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">🗝️</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">Discover powerful artifacts hidden in the crystal vaults.</p>
+              <div class="mt-4 space-y-4" id="relic-card">
+                <p class="text-sm text-slate-500">Press generate to uncover relics.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-relic"
+                  class="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
+                >
+                  Generate Relic
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Set Recovery</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-recovery-rarity"
+                    class="rounded-full border border-lime-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-lime-200 transition hover:border-lime-200 hover:text-lime-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">🌿</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">Find sanctuaries to restore stamina and mana.</p>
+              <div class="mt-4 space-y-4" id="recovery-card">
+                <p class="text-sm text-slate-500">Press generate to locate refuge.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-recovery"
+                  class="rounded-full bg-lime-500 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-200"
+                >
+                  Generate Recovery
+                </button>
+              </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+              <header class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-100">Pose Riddle</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cycle-riddle-rarity"
+                    class="rounded-full border border-amber-300/40 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200 transition hover:border-amber-200 hover:text-amber-100"
+                  >
+                    Cycle Rarity
+                  </button>
+                  <span class="text-3xl" aria-hidden="true">❓</span>
+                </div>
+              </header>
+              <p class="mt-2 text-sm text-slate-300">Set clever conundrums that guard the maze pathways.</p>
+              <div class="mt-4 space-y-4" id="riddle-card">
+                <p class="text-sm text-slate-500">Press generate to reveal a puzzle.</p>
+              </div>
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <button
+                  id="generate-riddle"
+                  class="rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
+                >
+                  Generate Riddle
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <aside class="space-y-8">
+          <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+            <header class="flex items-center justify-between">
+              <h2 class="text-xl font-semibold text-slate-100">Final Boss</h2>
+              <span class="text-3xl" aria-hidden="true">💀</span>
+            </header>
+            <p class="mt-2 text-sm text-slate-300">Reveal the looming threat that awaits at the maze heart.</p>
+            <div class="mt-4 space-y-4" id="boss-card">
+              <p class="text-sm text-slate-500">Press generate to unveil a boss.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <button
+                id="generate-boss"
+                class="rounded-full bg-orange-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-200"
+              >
+                Generate Boss
+              </button>
+            </div>
+          </article>
+
+          <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+            <header class="flex items-center justify-between">
+              <h2 class="text-xl font-semibold text-slate-100">Maze Board</h2>
+              <span class="text-3xl" aria-hidden="true">🧭</span>
+            </header>
+            <p class="mt-2 text-sm text-slate-300">Chart a new layout of rooms and encounters.</p>
+            <div class="mt-4 grid gap-4" id="board-summary">
+              <p class="text-sm text-slate-500">Generate a board to see weighted room counts.</p>
+            </div>
+            <div class="mt-4 space-y-4" id="board-grid"></div>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <button
+                id="generate-board"
+                class="rounded-full bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-200"
+              >
+                Generate Board
+              </button>
+            </div>
+          </article>
+
+          <article class="rounded-3xl border border-slate-800 bg-slate-900/75 p-6 shadow-lg shadow-slate-950/40">
+            <header class="flex items-center justify-between">
+              <h2 class="text-xl font-semibold text-slate-100">Adventure Log</h2>
+              <span class="text-3xl" aria-hidden="true">📜</span>
+            </header>
+            <p class="mt-2 text-sm text-slate-300">Chronicle highlights of the party's journey.</p>
+            <ul id="event-log" class="mt-4 space-y-3 text-sm text-slate-200">
+              <li class="rounded-xl bg-slate-950/50 px-4 py-3 text-slate-400">
+                Trigger generators to populate the adventure log.
+              </li>
+            </ul>
+          </article>
+        </aside>
+      </div>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
